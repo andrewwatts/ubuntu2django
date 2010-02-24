@@ -1,0 +1,24 @@
+
+# django properties, where:
+#       user:  the user that the project will be installed under
+#       pswd:  the password of that user
+#       site:  the django project site name
+django_user = 
+django_pswd = 
+django_site = 
+
+
+# fastcgi properties
+fastcgi_method = threaded
+fastcgi_host = 127.0.0.1
+fastcgi_port = 8080
+fastcgi_minspare = 4
+fastcgi_maxspare = 30
+
+
+# nginx properties
+nginx_server_name = localhost
+nginx_media_alias = /media
+nginx_media_root = /absolute/path/to/media/parent/directory
+nginx_listen = 80
+ 

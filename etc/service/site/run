@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+source /home/%(site)s/virtualenvs/%(site)s/bin/activate
+cd /home/%(user)s/%(site)s
+exec envuidgid %(user)s python manage.py runfcgi method=%(fastcgi_method)s host=%(fastcgi_host)s port=%(fastcgi_port)s pidfile=%(site)s.pid minspare=%(fastcgi_minspare)s maxspare=%(fastcgi_maxspare)s daemonize=false

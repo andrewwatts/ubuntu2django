@@ -1,0 +1,17 @@
+server {
+    listen %(nginx_listen)s;
+    server_name %(nginx_server_name)s;
+    access_log /var/log/nginx/%(site)s.access.log;
+
+    location %(nginx_media_alias)s {
+        autoindex on;
+        index index.html;
+        root %(nginx_media_root)s;
+        break;
+    }
+    location / {
+        include /etc/nginx/fastcgi_params;
+        fastcgi_pass 127.0.0.1:8080;
+        break;
+    }
+}
