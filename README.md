@@ -85,3 +85,29 @@ Bonus Tasks
         fab -c ./.fabricrc restart
         
         
+Problems
+---------
+Some VPS providers customize their `sources.list`, if you receive an error like `Package nginx has no installation candidate`, make sure `/etc/apt/sources.list` has the proper sources eg:
+
+    deb http://archive.ubuntu.com/ubuntu karmic main 
+    deb-src http://archive.ubuntu.com/ubuntu karmic main 
+
+    deb http://archive.ubuntu.com/ubuntu karmic-updates main 
+    deb-src http://archive.ubuntu.com/ubuntu karmic-updates main 
+
+    deb http://archive.ubuntu.com/ubuntu karmic-security main 
+    deb-src http://archive.ubuntu.com/ubuntu karmic-security main 
+
+
+    ## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
+    ## team. Also, please note that software in universe WILL NOT receive any
+    ## review or updates from the Ubuntu security team.
+    deb http://us.archive.ubuntu.com/ubuntu/ karmic universe
+    deb-src http://us.archive.ubuntu.com/ubuntu/ karmic universe
+    deb http://us.archive.ubuntu.com/ubuntu/ karmic-updates universe
+    deb-src http://us.archive.ubuntu.com/ubuntu/ karmic-updates universe
+        
+and then make sure you update apt cache:
+
+    apt-get update
+        
