@@ -1,0 +1,3 @@
+VIRTUALENV=/home/%(user)s/virtualenvs/%(site)s
+DJANGO_PROJECT_DIR=/home/%(user)s/%(site)s
+DJANGO_SETTINGS_MODULE=settings

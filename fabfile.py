@@ -32,14 +32,54 @@ def install():
     _configure_fastcgi()
     _configure_daemontools()
     _configure_nginx()
-
+    
+def install_celeryd():
+    '''install a celery daemon'''
+    celery_context = {
+        'user': env.django_user,
+        'site': env.django_site
+    }
+    upload_template('./etc/init.d/celeryd', '/etc/init.d/celeryd', context=celery_context, use_sudo=True)
+    sudo('chown root:root /etc/init.d/celeryd')
+    sudo('chmod 755 /etc/init.d/celeryd')
+    upload_template('./etc/default/celeryd', '/etc/default/celeryd', context=celery_context, use_sudo=True)
+    sudo('chown root:root /etc/default/celeryd')
+    sudo('chmod 644 /etc/default/celeryd')
+    sudo('update-rc.d celeryd defaults')
+            
+def install_celerybeat():
+    '''install a celerybeat daemon'''
+    celery_context = {
+        'user': env.django_user,
+        'site': env.django_site
+    }
+    upload_template('./etc/init.d/celerybeat', '/etc/init.d/celerybeat', context=celery_context, use_sudo=True)
+    sudo('chown root:root /etc/init.d/celerybeat')
+    sudo('chmod 755 /etc/init.d/celerybeat')    
+    upload_template('./etc/default/celerybeat', '/etc/default/celerybeat', context=celery_context, use_sudo=True)
+    sudo('chown root:root /etc/default/celerybeat')
+    sudo('chmod 644 /etc/default/celerybeat')    
+    sudo('update-rc.d celerybeat defaults')
+    
 def launch():
     '''launch the service'''
     sudo('svc -u /etc/service/%s' % (env.django_site))
     sudo('/etc/init.d/nginx start')
+    if exists('/etc/init.d/celeryd'):
+        with settings(warn_only=True):
+            sudo('/etc/init.d/celeryd start')
+    if exists('/etc/init.d/celerybeat'):
+        with settings(warn_only=True):
+            sudo('/etc/init.d/celerybeat start')
 
 def terminate():
     '''terminate the service'''
+    if exists('/etc/init.d/celerybeat'):
+        with settings(warn_only=True):
+            sudo('/etc/init.d/celerybeat stop')
+    if exists('/etc/init.d/celeryd'):
+        with settings(warn_only=True):
+            sudo('/etc/init.d/celeryd stop')
     sudo('/etc/init.d/nginx stop')
     sudo('svc -d /etc/service/%s' % (env.django_site))
     
@@ -134,4 +174,3 @@ def _configure_nginx():
             sudo('rm sites-enabled/%s' % (env.django_site))
         sudo('ln -s `pwd`/sites-available/%s sites-enabled/%s' % (env.django_site, env.django_site))
     sudo('/etc/init.d/nginx restart')
-    
